@@ -10,16 +10,19 @@ function App() {
 
    const data = [
       {
+         id: 1,
          name: 'John S.',
          salary: 1000,
          increase: false,
       },
       {
+         id: 2,
          name: 'Nick L.',
          salary: 800,
          increase: true,
       },
       {
+         id: 3,
          name: 'Jack K.',
          salary: 5000,
          increase: false,
