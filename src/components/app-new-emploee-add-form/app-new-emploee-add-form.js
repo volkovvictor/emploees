@@ -24,6 +24,7 @@ class AddNewEmploeeForm extends Component{
             <h3>Добавьте нового сотрудника</h3>
             <form action="#" className="add-form d-flex" onSubmit={(e) => {
                e.preventDefault();
+               if (!name.trim() || !salary.trim()) return;
                this.props.onAddItem({name, salary})
                this.setState({
                   name: '',
