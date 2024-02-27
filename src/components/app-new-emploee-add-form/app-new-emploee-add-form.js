@@ -22,7 +22,14 @@ class AddNewEmploeeForm extends Component{
       return (
          <div className="add-emlpoee">
             <h3>Добавьте нового сотрудника</h3>
-            <form action="#" className="add-form d-flex">
+            <form action="#" className="add-form d-flex" onSubmit={(e) => {
+               e.preventDefault();
+               this.props.onAddItem({name, salary})
+               this.setState({
+                  name: '',
+                  salary: ''
+               })
+            }}>
                <input 
                   type="text"
                   className="form-control new-post-label"

@@ -1,3 +1,5 @@
+import { Component } from 'react';
+
 import HeaderInfo from './components/app-info/app-info';
 import SearchInput from './components/app-search/app-search';
 import FilterItems from './components/app-filters/app-filters';
@@ -6,40 +8,71 @@ import AddNewEmploeeForm from './components/app-new-emploee-add-form/app-new-emp
 
 import './App.css';
 
-function App() {
+class App extends Component{
+   constructor(props) {
+      super(props)
+      this.state = {
+         data: [
+            {
+               id: 1,
+               name: 'John S.',
+               salary: 1000,
+               increase: false,
+            },
+            {
+               id: 2,
+               name: 'Nick L.',
+               salary: 800,
+               increase: true,
+            },
+            {
+               id: 3,
+               name: 'Jack K.',
+               salary: 5000,
+               increase: false,
+            }
+         ],
 
-   const data = [
-      {
-         id: 1,
-         name: 'John S.',
-         salary: 1000,
-         increase: false,
-      },
-      {
-         id: 2,
-         name: 'Nick L.',
-         salary: 800,
-         increase: true,
-      },
-      {
-         id: 3,
-         name: 'Jack K.',
-         salary: 5000,
-         increase: false,
+         maxId: 4,
       }
-   ]
+   }
 
-   return (
-      <div className="App">
-         <HeaderInfo/>
-         <div className="filter-panel">
-            <SearchInput/>
-            <FilterItems/>
+   deleteItem = (id) => {
+      this.setState(({data}) => {
+         return {
+            data: data.filter(item => item.id !== id),
+         }
+      })
+   }
+
+   addItem = (item) => {
+      this.setState(({data}) => {
+         const newItem = {
+            id: this.state.maxId,
+            name: item.name,
+            salary: item.salary,
+            increase: false
+         }
+         return {
+            data: [...data, newItem],
+            maxId: this.state.maxId + 1,
+         }
+      })
+   }
+
+   render() {
+      return (
+         <div className="App">
+            <HeaderInfo/>
+            <div className="filter-panel">
+               <SearchInput/>
+               <FilterItems/>
+            </div>
+            <EmploeesList data={this.state.data} onDelete={this.deleteItem}/>
+            <AddNewEmploeeForm id={this.state.maxId} onAddItem={this.addItem}/>
          </div>
-         <EmploeesList data={data}/>
-         <AddNewEmploeeForm/>
-      </div>
-   );
+      );
+   }
 }
 
 export default App;
