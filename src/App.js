@@ -35,9 +35,11 @@ class App extends Component{
                rise: false
             }
          ],
+         term: '',
+         filter: 'all'
+      };
 
-         maxId: 4,
-      }
+      this.maxId = 4;
    }
 
    deleteItem = (id) => {
@@ -58,7 +60,7 @@ class App extends Component{
          }
          return {
             data: [...data, newItem],
-            maxId: this.state.maxId + 1,
+            maxId: this.maxId++,
          }
       })
    }
@@ -75,21 +77,52 @@ class App extends Component{
       }))
    }
 
+   searchEmp = (items, term) => {
+      if (term.length === 0) {
+         return items;
+      }
+
+      return items.filter(item => {
+         return item.name.indexOf(term) > -1
+      })
+   }
+
+   filterEmp = (items, filter) => {
+      switch(filter) {
+         case 'rise':
+            return items.filter(item => item.rise)
+         case 'moreThen1000':
+            return items.filter(item => item.salary > 1000)
+         default :
+            return items
+      }
+   }
+
+   onSearchUpdate = (term) => {
+      this.setState({term})
+   }
+
+   onFilterUpdate = (filter) => {
+      this.setState({filter})
+   }
+
    render() {
-      const employees = this.state.data.length;
-      const increased = this.state.data.filter(item => item.increase).length;
+      const {data, term, filter} = this.state;
+      const employees = data.length;
+      const increased = data.filter(item => item.increase).length;
+      const visibleData = this.filterEmp(this.searchEmp(data, term), filter)
       return (
          <div className="App">
             <HeaderInfo employees={employees} increased={increased}/>
             <div className="filter-panel">
-               <SearchInput/>
-               <FilterItems/>
+               <SearchInput onSearchUpdate={this.onSearchUpdate}/>
+               <FilterItems filter={this.state.filter} onFilterUpdate={this.onFilterUpdate}/>
             </div>
             <EmploeesList 
-            data={this.state.data} 
+            data={visibleData} 
             onDelete={this.deleteItem}
             onToggleProp={this.onToggleProp}/>
-            <AddNewEmploeeForm id={this.state.maxId} onAddItem={this.addItem}/>
+            <AddNewEmploeeForm id={this.maxId} onAddItem={this.addItem}/>
          </div>
       );
    }
